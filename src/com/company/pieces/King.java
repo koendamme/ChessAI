@@ -1,0 +1,12 @@
+package com.company.pieces;
+
+import com.company.Square;
+
+import java.util.ArrayList;
+
+public class King extends Piece {
+    @Override
+    public ArrayList<Square> generateMoves(ArrayList<Square> currentSquares) {
+        return null;
+    }
+}
