@@ -1,23 +1,13 @@
 package com.company;
 
-import com.company.pieces.Piece;
+import java.awt.*;
 
-import java.util.ArrayList;
-
-public class Board {
-    private final ArrayList<Square> squares;
-    private ArrayList<PieceSet> pieceSets;
+public class Board extends Canvas {
+    private final Square[] squares;
 
 
     public Board(String notation) {
         this.squares = this.initBoard();
-        this.pieceSets = new ArrayList<>();
-        PieceSet black = new PieceSet(PieceColor.BLACK);
-        PieceSet white = new PieceSet(PieceColor.WHITE);
-        pieceSets.add(black);
-        pieceSets.add(white);
-
-        PieceFactory factory = new PieceFactory();
 
         String[] rows = notation.split("/");
 
@@ -28,54 +18,98 @@ public class Board {
                     column += Character.getNumericValue(c);
                 }
                 else {
-                    Piece p = factory.getPiece(c);
+                    Piece p = new Piece(c);
                     this.getSquare(column, row).setPiece(p);
 
-                    if (Character.isUpperCase(c)) {
-                        white.addPiece(p);
-                    }
-                    else {
-                        black.addPiece(p);
-                    }
                     column++;
                 }
             }
         }
     }
 
-    public ArrayList<Square> getSquares() {
+    public Square[] getSquares() {
         return this.squares;
     }
 
-    public PieceSet getPieceSet(PieceColor color) {
-        for (PieceSet set : pieceSets) {
-            if (set.getColor() == color) {
-                return set;
+    public void print() {
+        for (int i = 0; i < this.squares.length; i++) {
+            if (i%8 == 0) {
+                System.out.print("\n");
+            }
+            Square currSquare = this.squares[i];
+            if (currSquare.getPiece() != null) {
+                System.out.print(currSquare.getPiece().toString());
+            }
+            else {
+                System.out.print("_");
             }
         }
+        System.out.print("\n");
+    }
 
-        return null;
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+
+        for (Square s : squares) {
+            Color squareColor = this.getSquareColor(s.getX(), s.getY());
+            g.setColor(squareColor);
+
+            int sideLength = 70;
+            g.fillRect(s.getX() * sideLength, s.getY() * sideLength, sideLength, sideLength);
+            if (s.getPiece() !=null) {
+                g.drawImage(s.getPiece().getIcon().getScaledInstance(sideLength,
+                        sideLength, Image.SCALE_SMOOTH),
+                        s.getX() * sideLength,
+                        s.getY() * sideLength,
+                        squareColor,
+                        null);
+            }
+        }
     }
 
     private Square getSquare(int x, int y) {
+        Square square = null;
+
         for (Square s : this.squares) {
             if (s.getX() == x && s.getY() == y) {
-                return s;
+                square = s;
             }
         }
 
-        throw new IllegalArgumentException();
+        return square;
     }
 
-    ArrayList<Square> initBoard() {
-        ArrayList<Square> squares = new ArrayList<>();
+    private Square[] initBoard() {
+        Square[] squares = new Square[64];
 
+        int i = 0;
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 8; x++) {
-                squares.add(new Square(x, y));
+                squares[i] = new Square(x, y);
+                i++;
             }
         }
 
         return squares;
+    }
+
+    private Color getSquareColor(int x, int y) {
+        Color color;
+
+        if (y % 2 == 0) {
+            if (x % 2 == 0)
+                color = new Color(238,238,210,255);
+            else
+                color = new Color(118,150,86,255);
+        }
+        else {
+            if (x % 2 == 0)
+                color = new Color(118,150,86,255);
+            else
+                color = new Color(238,238,210,255);
+        }
+
+        return color;
     }
 }
