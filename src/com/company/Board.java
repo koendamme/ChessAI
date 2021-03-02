@@ -1,10 +1,13 @@
 package com.company;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-public class Board extends Canvas {
+public class Board extends JComponent {
     private final Square[] squares;
-
 
     public Board(String notation) {
         this.squares = this.initBoard();
@@ -31,53 +34,8 @@ public class Board extends Canvas {
         return this.squares;
     }
 
-    public void print() {
-        for (int i = 0; i < this.squares.length; i++) {
-            if (i%8 == 0) {
-                System.out.print("\n");
-            }
-            Square currSquare = this.squares[i];
-            if (currSquare.getPiece() != null) {
-                System.out.print(currSquare.getPiece().toString());
-            }
-            else {
-                System.out.print("_");
-            }
-        }
-        System.out.print("\n");
-    }
-
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-
-        for (Square s : squares) {
-            Color squareColor = this.getSquareColor(s.getX(), s.getY());
-            g.setColor(squareColor);
-
-            int sideLength = 70;
-            g.fillRect(s.getX() * sideLength, s.getY() * sideLength, sideLength, sideLength);
-            if (s.getPiece() !=null) {
-                g.drawImage(s.getPiece().getIcon().getScaledInstance(sideLength,
-                        sideLength, Image.SCALE_SMOOTH),
-                        s.getX() * sideLength,
-                        s.getY() * sideLength,
-                        squareColor,
-                        null);
-            }
-        }
-    }
-
-    private Square getSquare(int x, int y) {
-        Square square = null;
-
-        for (Square s : this.squares) {
-            if (s.getX() == x && s.getY() == y) {
-                square = s;
-            }
-        }
-
-        return square;
+    public Square getSquare(int x, int y) {
+        return this.squares[y*8 + x];
     }
 
     private Square[] initBoard() {
@@ -94,22 +52,4 @@ public class Board extends Canvas {
         return squares;
     }
 
-    private Color getSquareColor(int x, int y) {
-        Color color;
-
-        if (y % 2 == 0) {
-            if (x % 2 == 0)
-                color = new Color(238,238,210,255);
-            else
-                color = new Color(118,150,86,255);
-        }
-        else {
-            if (x % 2 == 0)
-                color = new Color(118,150,86,255);
-            else
-                color = new Color(238,238,210,255);
-        }
-
-        return color;
-    }
 }
