@@ -1,12 +1,6 @@
-package com.company;
+package com.company.models;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
-public class Board extends JComponent {
+public class Board {
     private final Square[] squares;
 
     public Board(String notation) {
@@ -30,6 +24,11 @@ public class Board extends JComponent {
         }
     }
 
+    public void applyMove(Move move) {
+        move.getEndSquare().setPiece(move.getStartSquare().getPiece());
+        move.getStartSquare().setPiece(null);
+    }
+
     public Square[] getSquares() {
         return this.squares;
     }
@@ -51,5 +50,4 @@ public class Board extends JComponent {
 
         return squares;
     }
-
 }

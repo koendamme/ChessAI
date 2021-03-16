@@ -1,7 +1,11 @@
 package com.company;
 
-import com.company.strategy.PieceStrategy;
-import com.company.strategy.SlidingStrategy;
+import com.company.models.Move;
+import com.company.models.PieceColor;
+import com.company.models.PieceType;
+import com.company.models.Square;
+import com.company.piecestrategy.PieceStrategy;
+import com.company.piecestrategy.SlidingStrategy;
 
 import java.util.ArrayList;
 

@@ -1,12 +1,13 @@
-package com.company;
+package com.company.models;
 
 public class Move {
     private Square startSquare, endSquare;
     private Piece piece;
 
-    public Move(Square startSquare, Square endSquare) {
+    public Move(Square startSquare, Square endSquare, Piece piece) {
         this.startSquare = startSquare;
         this.endSquare = endSquare;
+        this.piece = piece;
     }
 
     public Square getStartSquare() {
@@ -23,5 +24,13 @@ public class Move {
 
     public void setEndSquare(Square endSquare) {
         this.endSquare = endSquare;
+    }
+
+    public Piece getPiece() {
+        return piece;
+    }
+
+    public void setPiece(Piece piece) {
+        this.piece = piece;
     }
 }

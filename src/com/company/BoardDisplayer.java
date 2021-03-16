@@ -1,7 +1,13 @@
 package com.company;
 
+import com.company.models.Board;
+import com.company.models.Move;
+import com.company.models.Square;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class BoardDisplayer extends JComponent {
@@ -14,7 +20,6 @@ public class BoardDisplayer extends JComponent {
         this.board = board;
         this.setPreferredSize(new Dimension(screenSideLength, screenSideLength));
         this.sideLength = screenSideLength/8;
-
         this.availableMoves = new ArrayList<>();
     }
 
@@ -29,25 +34,32 @@ public class BoardDisplayer extends JComponent {
             g.setColor(squareColor);
             g.fillRect(s.getX() * sideLength, s.getY() * sideLength, sideLength, sideLength);
 
+            // Drawing possible moves
+            for (Move m : this.availableMoves) {
+                if (m.getEndSquare().equals(s)) {
+                    g.setColor(Color.ORANGE);
+                    if (s.getPiece() != null && s.getPiece().getColor() != m.getPiece().getColor()) {
+                        g.fillRect(s.getX() * sideLength, s.getY() * sideLength, sideLength, sideLength);
+                    }
+                    else {
+                        g.fillOval(s.getX() * sideLength + sideLength / 3,
+                                s.getY() * sideLength + sideLength / 3,
+                                sideLength / 3,
+                                sideLength / 3);
+                    }
+                }
+            }
+
             // Drawing the pieces
-            if (s.getPiece() !=null) {
+            if (s.getPiece() != null) { // && s.getPiece().getType() == PieceType.QUEEN) {
                 g.drawImage(s.getPiece().getIcon().getScaledInstance(sideLength,
                         sideLength, Image.SCALE_SMOOTH),
                         s.getX() * sideLength,
                         s.getY() * sideLength,
-                        squareColor,
                         null);
             }
-
-            // Drawing possible moves
-            if (this.availableMoves.stream().anyMatch(t -> t.getEndSquare().equals(s))) {
-                g.setColor(Color.ORANGE);
-                g.fillOval(s.getX() * sideLength + sideLength/3,
-                        s.getY() * sideLength + sideLength/3,
-                        sideLength/3,
-                        sideLength/3);
-            }
         }
+        repaint();
     }
 
     private Color getSquareColor(int x, int y) {

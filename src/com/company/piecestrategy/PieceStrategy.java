@@ -1,7 +1,7 @@
-package com.company.strategy;
+package com.company.piecestrategy;
 
-import com.company.Move;
-import com.company.Square;
+import com.company.models.Move;
+import com.company.models.Square;
 
 import java.util.ArrayList;
 

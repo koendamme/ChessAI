@@ -1,7 +1,10 @@
 package com.company;
 
+import com.company.models.Board;
+import com.company.models.Move;
+import com.company.models.Square;
+
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -9,38 +12,36 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) {
-        Board board = new Board("8/8/8/3Q4/8/8/8/8");
+        GameManager manager = new GameManager();
 
-        int screenSideLength = 800;
-        BoardDisplayer displayer = new BoardDisplayer(board, screenSideLength);
+//        Board board = new Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+//
+//        int screenSideLength = 800;
+//        BoardDisplayer displayer = new BoardDisplayer(board, screenSideLength);
+//        MoveGenerator generator = new MoveGenerator();
 
-        MoveGenerator generator = new MoveGenerator();
-
-        displayer.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                System.out.println("Click!");
-                Square[] selected = {board.getSquare(e.getX() / (screenSideLength/8), e.getY() / (screenSideLength/8))};
-                int xPos = e.getX() / (screenSideLength/8);
-                int yPos = e.getY() / (screenSideLength/8);
-
-                if (selected[0].getPiece() != null) {
-                    displayer.setSelectedSquare(selected[0]);
-
-                    ArrayList<Move> moves = generator.generateMovesForPiece(board.getSquares(), yPos*8 + xPos);
-                    displayer.setAvailableMoves(moves);
-                }
-                else {
-                    displayer.setSelectedSquare(null);
-                    displayer.emptyAvailableMoves();
-                }
-            }
-        });
-//        ArrayList<Move> moves = generator.generateMoves(board.getSquares(), PieceColor.WHITE);
-//        displayer.setAvailableMoves(moves);
-
-        createWindow(displayer);
+//        displayer.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                super.mouseClicked(e);
+//                Square selected = board.getSquare(e.getX() / (screenSideLength/8), e.getY() / (screenSideLength/8));
+//                int xPos = e.getX() / (screenSideLength/8);
+//                int yPos = e.getY() / (screenSideLength/8);
+//
+//                if (selected.getPiece() != null) {
+//                    displayer.setSelectedSquare(selected);
+//
+//                    ArrayList<Move> moves = generator.generateMovesForPiece(board.getSquares(), yPos*8 + xPos);
+//                    displayer.setAvailableMoves(moves);
+//                }
+//                else {
+//                    displayer.setSelectedSquare(null);
+//                    displayer.emptyAvailableMoves();
+//                }
+//            }
+//        });
+//
+//        createWindow(displayer);
     }
 
 
