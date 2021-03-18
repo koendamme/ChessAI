@@ -25,7 +25,8 @@ public class Board {
     }
 
     public void applyMove(Move move) {
-        move.getEndSquare().setPiece(move.getStartSquare().getPiece());
+        move.getPiece().setHasMoved(true);
+        move.getEndSquare().setPiece(move.getPiece());
         move.getStartSquare().setPiece(null);
     }
 

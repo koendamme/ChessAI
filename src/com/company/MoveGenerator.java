@@ -32,12 +32,9 @@ public class MoveGenerator {
 
     public ArrayList<Move> generateMovesForPiece(Square[] board, int squareIndex) {
         ArrayList<Move> moves = new ArrayList<>();
-        PieceStrategy strategy;
 
-        if (board[squareIndex].getPiece() != null && board[squareIndex].getPiece().getType() == PieceType.QUEEN) {
-            strategy = new SlidingStrategy();
-            ArrayList<Move> rookMoves = strategy.generate(squareIndex, board);
-            moves.addAll(rookMoves);
+        for (PieceStrategy strategy : board[squareIndex].getPiece().getStrategies()) {
+            moves.addAll(strategy.generate(squareIndex, board));
         }
 
         return moves;

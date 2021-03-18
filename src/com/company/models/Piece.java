@@ -1,19 +1,20 @@
 package com.company.models;
 
+import com.company.piecestrategy.PieceStrategy;
+import com.company.piecestrategy.PieceStrategyFactory;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Piece {
     private PieceType type;
     private PieceColor color;
     private BufferedImage icon;
-
-    public Piece(PieceType type, PieceColor color) {
-        this.type = type;
-        this.color = color;
-    }
+    private boolean hasMoved = false;
+    private final ArrayList<PieceStrategy> strategies;
 
     public Piece(char type) {
         this.color = Character.isUpperCase(type) ? PieceColor.WHITE : PieceColor.BLACK;
@@ -32,6 +33,9 @@ public class Piece {
         } catch (IOException e) {
             System.out.println("Cant load image");
         }
+
+        PieceStrategyFactory strategyFactory = new PieceStrategyFactory();
+        this.strategies = strategyFactory.getStrategies(this.type);
     }
 
     public PieceColor getColor() {
@@ -97,5 +101,17 @@ public class Piece {
 
     public BufferedImage getIcon() {
         return icon;
+    }
+
+    public ArrayList<PieceStrategy> getStrategies() {
+        return strategies;
+    }
+
+    public boolean hasMoved() {
+        return hasMoved;
+    }
+
+    public void setHasMoved(boolean hasMoved) {
+        this.hasMoved = hasMoved;
     }
 }

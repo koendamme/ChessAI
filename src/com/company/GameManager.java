@@ -12,7 +12,7 @@ public class GameManager {
     private GameStateContext gameStateContext;
 
     public GameManager() {
-        this.board = new Board("rnbqkbnr/pppppppp/8/8/8/8/8/RNBQKBNR");
+        this.board = new Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
 //        this.board = new Board("8/8/8/3Q4/8/8/pppppppp/8");
 
         int screenSideLength = 800;
