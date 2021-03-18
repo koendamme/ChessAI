@@ -18,11 +18,8 @@ public class GameStateContext {
         this.state = new WhiteTurnState(this);
     }
 
-    public void move() {
-        this.state.move();
-    }
-
     public void setState(GameState state) {
+        this.state = null;
         this.state = state;
     }
 

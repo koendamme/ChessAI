@@ -20,14 +20,14 @@ public class WhiteTurnState extends MouseAdapter implements GameState {
     @Override
     public void move() {
         // TODO: Move logic
-        context.setState(new BlackTurnState(this.context));
+//        context.setState(new BlackTurnState(this.context));
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
         super.mousePressed(e);
-        int xPos = e.getX() / (800/8);
-        int yPos = e.getY() / (800/8);
+        int xPos = e.getX() / (this.context.getDisplayer().getScreenSideLength()/8);
+        int yPos = e.getY() / (this.context.getDisplayer().getScreenSideLength()/8);
 
         Square s = this.context.getBoard().getSquare(xPos, yPos);
 
@@ -41,16 +41,22 @@ public class WhiteTurnState extends MouseAdapter implements GameState {
     @Override
     public void mouseReleased(MouseEvent e) {
         super.mouseReleased(e);
-        int xPos = e.getX() / (800/8);
-        int yPos = e.getY() / (800/8);
+        if (this.availableMoves != null) {
+            int xPos = e.getX() / (this.context.getDisplayer().getScreenSideLength() / 8);
+            int yPos = e.getY() / (this.context.getDisplayer().getScreenSideLength() / 8);
 
-        Square s = this.context.getBoard().getSquare(xPos, yPos);
+            Square s = this.context.getBoard().getSquare(xPos, yPos);
 
-        this.availableMoves.stream()
-                .filter(m -> m.getEndSquare().equals(s))
-                .findFirst().ifPresent(move -> this.context.getBoard().applyMove(move));
+            this.availableMoves.stream()
+                    .filter(m -> m.getEndSquare().equals(s))
+                    .findFirst().ifPresent(move -> {
+                this.context.getBoard().applyMove(move);
+                this.context.getDisplayer().removeMouseListener(this);
+                this.context.setState(new BlackTurnState(this.context));
+            });
 
-        this.context.getDisplayer().setSelectedSquare(null);
-        this.context.getDisplayer().emptyAvailableMoves();
+            this.context.getDisplayer().setSelectedSquare(null);
+            this.context.getDisplayer().emptyAvailableMoves();
+        }
     }
 }

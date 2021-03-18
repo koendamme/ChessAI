@@ -15,9 +15,11 @@ public class BoardDisplayer extends JComponent {
     private final int sideLength;
     private Square selectedSquare;
     private ArrayList<Move> availableMoves;
+    private final int screenSideLength;
 
     public BoardDisplayer(Board board, int screenSideLength) {
         this.board = board;
+        this.screenSideLength = screenSideLength;
         this.setPreferredSize(new Dimension(screenSideLength, screenSideLength));
         this.sideLength = screenSideLength/8;
         this.availableMoves = new ArrayList<>();
@@ -93,5 +95,9 @@ public class BoardDisplayer extends JComponent {
     public void setSelectedSquare(Square s) {
         this.selectedSquare = s;
         repaint();
+    }
+
+    public int getScreenSideLength() {
+        return screenSideLength;
     }
 }

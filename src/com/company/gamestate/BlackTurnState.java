@@ -1,6 +1,7 @@
 package com.company.gamestate;
 
-import com.company.models.Board;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class BlackTurnState implements GameState {
     private final GameStateContext context;
@@ -10,6 +11,7 @@ public class BlackTurnState implements GameState {
 
         // TODO: Move logic
         System.out.println("Black made a move");
+        System.out.println();
         this.context.setState(new WhiteTurnState(this.context));
     }
 
