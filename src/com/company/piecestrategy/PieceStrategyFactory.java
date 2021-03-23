@@ -14,6 +14,8 @@ public class PieceStrategyFactory {
             strategies.add(new PawnCaptureStrategy());
         } else if (pieceType == PieceType.KNIGHT) {
             strategies.add(new KnightStrategy());
+        } else if (pieceType == PieceType.KING) {
+            strategies.add(new KingStrategy());
         }
 
         return strategies;

@@ -22,7 +22,7 @@ public class BlackTurnState implements GameState {
 
             context.setState(new WhiteTurnState(context));
         }
-        
+
     }
 
     @Override
