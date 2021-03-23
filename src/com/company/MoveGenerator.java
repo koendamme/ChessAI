@@ -12,17 +12,13 @@ import java.util.ArrayList;
 public class MoveGenerator {
     public ArrayList<Move> generateMovesForAllPieces(Square[] board, PieceColor color) {
         ArrayList<Move> moves = new ArrayList<>();
-        PieceStrategy strategy;
 
         for (int i = 0; i < board.length; i++) {
             Square currSquare = board[i];
 
             if (currSquare.getPiece() != null && currSquare.getPiece().getColor() == color) {
-
-                if (currSquare.getPiece().getType() == PieceType.QUEEN) {
-                    strategy = new SlidingStrategy();
-                    ArrayList<Move> rookMoves = strategy.generate(i, board);
-                    moves.addAll(rookMoves);
+                for (PieceStrategy strategy : currSquare.getPiece().getStrategies()) {
+                    moves.addAll((strategy.generate(i, board)));
                 }
             }
         }

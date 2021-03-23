@@ -20,14 +20,14 @@ public class SlidingStrategy implements PieceStrategy {
             for (int i = 0; i < board[pieceIndex].getNumSquaresToEdge()[direction]; i++) {
                 Square targetSquare =  board[pieceIndex + directionOffsets[direction] * (i + 1)];
 
-                if (targetSquare.getPiece() != null && targetSquare.getPiece().getColor() == PieceColor.WHITE) {
+                if (targetSquare.getPiece() != null && targetSquare.getPiece().getColor() == board[pieceIndex].getPiece().getColor()) {
                     // Friendly piece
                     break;
                 }
 
                 generatedMoves.add(new Move(board[pieceIndex], targetSquare, board[pieceIndex].getPiece()));
 
-                if (targetSquare.getPiece() != null && targetSquare.getPiece().getColor() == PieceColor.BLACK) {
+                if (targetSquare.getPiece() != null && targetSquare.getPiece().getColor() != board[pieceIndex].getPiece().getColor()) {
                     // Can't move further after capturing enemy piece
                     break;
                 }

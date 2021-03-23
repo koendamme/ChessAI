@@ -23,7 +23,7 @@ public class PawnMoveStrategy implements PieceStrategy{
                 Square targetSquare = board[pieceIndex + offset];
 
                 if (targetSquare.getPiece() != null) {
-                    // Friendly piece
+                    // Can't move onto another piece
                     break;
                 }
 

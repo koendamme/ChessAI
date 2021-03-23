@@ -16,15 +16,12 @@ public class PawnCaptureStrategy implements PieceStrategy {
         for (int directionOffset : directionOffsets) {
             int offset = board[pieceIndex].getPiece().getColor() == PieceColor.WHITE ? directionOffset * -1 : directionOffset;
 
-            if (pieceIndex + offset >= 0 && pieceIndex + offset < 64) {
-                Square targetSquare = board[pieceIndex + offset];
+            if (pieceIndex + offset >= 0 &&
+                    pieceIndex + offset < 64 && board[pieceIndex + offset].getPiece() != null &&
+                    board[pieceIndex + offset].getPiece().getColor() != board[pieceIndex].getPiece().getColor()) {
 
-                if (targetSquare.getPiece() == null || targetSquare.getPiece().getColor() == board[pieceIndex].getPiece().getColor()) {
-                    // Friendly piece
-                    break;
-                }
+                generatedMoves.add(new Move(board[pieceIndex], board[pieceIndex + offset], board[pieceIndex].getPiece()));
 
-                generatedMoves.add(new Move(board[pieceIndex], targetSquare, board[pieceIndex].getPiece()));
             }
         }
 

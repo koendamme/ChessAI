@@ -1,18 +1,25 @@
 package com.company.gamestate;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import com.company.models.Move;
+import com.company.models.PieceColor;
+import com.company.models.Square;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class BlackTurnState implements GameState {
-    private final GameStateContext context;
 
     public BlackTurnState(GameStateContext context) {
-        this.context = context;
-
         // TODO: Move logic
-        System.out.println("Black made a move");
-        System.out.println();
-        this.context.setState(new WhiteTurnState(this.context));
+        ArrayList<Move> availableMoves = context.getGenerator().generateMovesForAllPieces(context.getBoard().getSquares(), PieceColor.BLACK);
+
+        Random random = new Random();
+
+        Move randomMove = availableMoves.get(random.nextInt(availableMoves.size()));
+
+        context.getBoard().applyMove(randomMove);
+
+        context.setState(new WhiteTurnState(context));
     }
 
     @Override
