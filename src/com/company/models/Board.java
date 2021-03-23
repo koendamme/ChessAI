@@ -38,6 +38,10 @@ public class Board {
         return this.squares[y*8 + x];
     }
 
+    public boolean squareInBounds(int squareIndex) {
+        return squareIndex >= 0 && squareIndex < 64;
+    }
+
     private Square[] initBoard() {
         Square[] squares = new Square[64];
 

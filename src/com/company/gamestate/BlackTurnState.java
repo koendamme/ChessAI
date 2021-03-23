@@ -11,15 +11,18 @@ public class BlackTurnState implements GameState {
 
     public BlackTurnState(GameStateContext context) {
         // TODO: Move logic
-        ArrayList<Move> availableMoves = context.getGenerator().generateMovesForAllPieces(context.getBoard().getSquares(), PieceColor.BLACK);
+        ArrayList<Move> availableMoves = context.getGenerator().generateMovesForAllPieces(context.getBoard(), PieceColor.BLACK);
 
-        Random random = new Random();
+        if (availableMoves.size() > 0) {
+            Random random = new Random();
 
-        Move randomMove = availableMoves.get(random.nextInt(availableMoves.size()));
+            Move randomMove = availableMoves.get(random.nextInt(availableMoves.size()));
 
-        context.getBoard().applyMove(randomMove);
+            context.getBoard().applyMove(randomMove);
 
-        context.setState(new WhiteTurnState(context));
+            context.setState(new WhiteTurnState(context));
+        }
+        
     }
 
     @Override

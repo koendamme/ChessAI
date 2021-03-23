@@ -33,7 +33,7 @@ public class WhiteTurnState extends MouseAdapter implements GameState {
 
         if (s.getPiece() != null && s.getPiece().getColor() == PieceColor.WHITE) {
             this.context.getDisplayer().setSelectedSquare(s);
-            this.availableMoves = this.context.getGenerator().generateMovesForPiece(this.context.getBoard().getSquares(), s.getY()*8 + s.getX());
+            this.availableMoves = this.context.getGenerator().generateMovesForPiece(this.context.getBoard(), s.getY()*8 + s.getX());
             this.context.getDisplayer().setAvailableMoves(this.availableMoves);
         }
     }
