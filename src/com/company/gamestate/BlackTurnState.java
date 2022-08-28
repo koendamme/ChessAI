@@ -2,7 +2,6 @@ package com.company.gamestate;
 
 import com.company.models.Move;
 import com.company.models.PieceColor;
-import com.company.models.Square;
 
 import java.util.ArrayList;
 import java.util.Random;

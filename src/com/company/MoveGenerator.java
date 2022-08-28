@@ -2,7 +2,6 @@ package com.company;
 
 import com.company.models.*;
 import com.company.piecestrategy.PieceStrategy;
-import com.company.piecestrategy.SlidingStrategy;
 
 import java.util.ArrayList;
 
