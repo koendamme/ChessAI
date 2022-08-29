@@ -3,11 +3,24 @@ package com.company.models;
 public class Move {
     private Square startSquare, endSquare;
     private Piece piece;
+    private CastleMove castleMove;
 
     public Move(Square startSquare, Square endSquare, Piece piece) {
         this.startSquare = startSquare;
         this.endSquare = endSquare;
         this.piece = piece;
+    }
+
+    public Move(CastleMove castleMove) {
+        this.castleMove = castleMove;
+    }
+
+    public boolean isCastleMove() {
+        return this.castleMove != null;
+    }
+
+    public CastleMove getCastleMove() {
+        return this.castleMove;
     }
 
     public Square getStartSquare() {

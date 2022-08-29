@@ -36,9 +36,16 @@ public class BoardDisplayer extends JComponent {
 
             // Drawing possible moves
             for (Move m : this.availableMoves) {
-                if (m.getEndSquare().equals(s)) {
+                Square end;
+                if (m.isCastleMove()) {
+                    end = m.getCastleMove().getKingMove().getEndSquare();
+                } else {
+                    end = m.getEndSquare();
+                }
+
+                if (end.equals(s)) {
                     g.setColor(Color.ORANGE);
-                    if (s.getPiece() != null && s.getPiece().getColor() != m.getPiece().getColor()) {
+                    if (s.getPiece() != null && s.getPiece().getColor() != end.getPiece().getColor()) {
                         g.fillRect(s.getX() * sideLength, s.getY() * sideLength, sideLength, sideLength);
                     }
                     else {

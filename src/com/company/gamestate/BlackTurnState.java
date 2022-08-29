@@ -17,7 +17,9 @@ public class BlackTurnState implements GameState {
 
             Move randomMove = availableMoves.get(random.nextInt(availableMoves.size()));
 
-            context.getBoard().applyMove(randomMove);
+            if (!randomMove.isCastleMove()) {
+                context.getBoard().applyMove(randomMove);
+            }
 
             context.setState(new WhiteTurnState(context));
         }

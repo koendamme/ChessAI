@@ -47,13 +47,33 @@ public class WhiteTurnState extends MouseAdapter implements GameState {
 
             Square s = this.context.getBoard().getSquare(xPos, yPos);
 
-            this.availableMoves.stream()
-                    .filter(m -> m.getEndSquare().equals(s))
-                    .findFirst().ifPresent(move -> {
-                this.context.getBoard().applyMove(move);
-                this.context.getDisplayer().removeMouseListener(this);
-                this.context.setState(new BlackTurnState(this.context));
-            });
+            for (Move move : this.availableMoves) {
+                if (move.isCastleMove() && move.getCastleMove().getKingMove().getEndSquare().equals(s)) {
+                    this.context.getBoard().applyMove(move.getCastleMove().getRookMove());
+                    this.context.getBoard().applyMove(move.getCastleMove().getKingMove());
+                    
+                    this.context.getDisplayer().removeMouseListener(this);
+                    this.context.setState(new BlackTurnState(this.context));
+                } else if (!move.isCastleMove() && move.getEndSquare().equals(s)) {
+                    this.context.getBoard().applyMove(move);
+                    
+                    this.context.getDisplayer().removeMouseListener(this);
+                    this.context.setState(new BlackTurnState(this.context));
+                }
+            }
+
+            // this.availableMoves.stream()
+            //         .filter(m -> m.getEndSquare().equals(s))
+            //         .findFirst().ifPresent(move -> {
+            //     if (move.isCastleMove()) {
+            //         this.context.getBoard().applyMove(move.getCastleMove().getRookMove());
+            //         this.context.getBoard().applyMove(move.getCastleMove().getKingMove());
+            //     } else {
+            //         this.context.getBoard().applyMove(move);
+            //     }
+            //     this.context.getDisplayer().removeMouseListener(this);
+            //     this.context.setState(new BlackTurnState(this.context));
+            // });
 
             this.context.getDisplayer().setSelectedSquare(null);
             this.context.getDisplayer().emptyAvailableMoves();
