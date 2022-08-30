@@ -29,18 +29,32 @@ public class Board {
         move.getPiece().setHasMoved(true);
         move.getEndSquare().setPiece(move.getPiece());
         move.getStartSquare().setPiece(null);
+        if (move.isEnPassantMove()) {
+            move.getEnPassentCaptureSquare().setPiece(null);
+        }
         this.tempCaptured = null;
     }
   
     public void tempMove(Move move) {
-        this.tempCaptured = move.getEndSquare().getPiece();
+        if (move.isEnPassantMove()) {
+            this.tempCaptured = move.getEnPassentCaptureSquare().getPiece();
+        } else {
+            this.tempCaptured = move.getEndSquare().getPiece();
+        }
+
         move.getEndSquare().setPiece(move.getPiece());
         move.getStartSquare().setPiece(null);
     }
 
     public void cancelMove(Move move) {
+        if (move.isEnPassantMove()) {
+            move.getEnPassentCaptureSquare().setPiece(this.tempCaptured);
+            move.getEndSquare().setPiece(null);
+        } else {
+            move.getEndSquare().setPiece(this.tempCaptured);
+        }
+
         move.getStartSquare().setPiece(move.getPiece());
-        move.getEndSquare().setPiece(this.tempCaptured);
     }
 
     public Square[] getSquares() {

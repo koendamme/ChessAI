@@ -6,30 +6,6 @@ import com.company.piecestrategy.PieceStrategy;
 import java.util.ArrayList;
 
 public class MoveGenerator {
-    // public ArrayList<Move> generateMovesForAllPieces(Board board, PieceColor color) {
-    //     ArrayList<Move> moves = new ArrayList<>();
-
-    //     for (int i = 0; i < board.getSquares().length; i++) {
-    //         Piece currPiece = board.getSquares()[i].getPiece();
-
-    //         if (currPiece != null && currPiece.getColor() == color) {
-    //             for (PieceStrategy strategy : currPiece.getStrategies()) {
-    //                 moves.addAll((strategy.generate(i, board)));
-    //             }
-
-    //             // Castling
-    //             if (currPiece.getType() == PieceType.KING && !currPiece.hasMoved()) {
-    //                 CastleMove cm = this.generateCastleMove(board, i);
-    //                 if (cm.getKingMove() != null) {
-    //                     moves.add(new Move(cm));
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     return moves;
-    // }
-
     public ArrayList<Move> generateMovesForPiece(Board board, int squareIndex) {
         ArrayList<Move> legalMoves = new ArrayList<>();
         Piece piece = board.getSquares()[squareIndex].getPiece();

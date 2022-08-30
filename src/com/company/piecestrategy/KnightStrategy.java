@@ -15,8 +15,8 @@ public class KnightStrategy implements PieceStrategy {
         for (int i = 0; i < 4; i++) {
             if (squaresToEdge[i] >= 2) {
                 for (int offset : offsets[i]) {
-                    int oldX = pieceIndex % 8;
-                    int newX = (pieceIndex + offset) % 8;
+                    int oldX = board.getSquares()[pieceIndex].getX();
+                    int newX = board.getSquares()[pieceIndex + offset].getX();
                     
                     if (board.squareInBounds(pieceIndex + offset) &&
                             (board.getSquares()[pieceIndex + offset].getPiece() == null ||
