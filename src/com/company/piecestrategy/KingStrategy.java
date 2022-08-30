@@ -12,15 +12,15 @@ public class KingStrategy implements PieceStrategy {
         ArrayList<Move> moves = new ArrayList<>();
 
         int[] offsets = { -8, 1, 8, -1, -7, 9, 7, -9 };
+        int[] squaresToEdge = board.getSquares()[pieceIndex].getNumSquaresToEdge();
 
-        for (int offset : offsets) {
-            if (board.squareInBounds(pieceIndex + offset)) {
-                Square targetSquare = board.getSquares()[pieceIndex + offset];
+        for (int i = 0; i < offsets.length; i++) {
+            if (squaresToEdge[i] > 0) {
+                Square targetSquare = board.getSquares()[pieceIndex + offsets[i]];
 
                 if (targetSquare.getPiece() == null || targetSquare.getPiece().getColor() != board.getSquares()[pieceIndex].getPiece().getColor()) {
                     moves.add(new Move(board.getSquares()[pieceIndex], targetSquare, board.getSquares()[pieceIndex].getPiece()));
                 }
-
             }
         }
 
