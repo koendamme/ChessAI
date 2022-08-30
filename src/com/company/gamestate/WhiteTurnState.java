@@ -2,6 +2,7 @@ package com.company.gamestate;
 
 import com.company.models.Move;
 import com.company.models.PieceColor;
+import com.company.models.PieceType;
 import com.company.models.Square;
 
 import java.awt.event.MouseAdapter;
@@ -19,8 +20,7 @@ public class WhiteTurnState extends MouseAdapter implements GameState {
 
     @Override
     public void move() {
-        // TODO: Move logic
-//        context.setState(new BlackTurnState(this.context));
+
     }
 
     @Override
@@ -51,32 +51,22 @@ public class WhiteTurnState extends MouseAdapter implements GameState {
                 if (move.isCastleMove() && move.getCastleMove().getKingMove().getEndSquare().equals(s)) {
                     this.context.getBoard().applyMove(move.getCastleMove().getRookMove());
                     this.context.getBoard().applyMove(move.getCastleMove().getKingMove());
-                    
-                    this.context.getDisplayer().removeMouseListener(this);
-                    this.context.setState(new BlackTurnState(this.context));
+                    System.out.println("Hello this is a castle move");
+                    this.finishMove();
                 } else if (!move.isCastleMove() && move.getEndSquare().equals(s)) {
                     this.context.getBoard().applyMove(move);
-                    
-                    this.context.getDisplayer().removeMouseListener(this);
-                    this.context.setState(new BlackTurnState(this.context));
+                    System.out.println("This is not a castle move");
+                    this.finishMove();
                 }
             }
-
-            // this.availableMoves.stream()
-            //         .filter(m -> m.getEndSquare().equals(s))
-            //         .findFirst().ifPresent(move -> {
-            //     if (move.isCastleMove()) {
-            //         this.context.getBoard().applyMove(move.getCastleMove().getRookMove());
-            //         this.context.getBoard().applyMove(move.getCastleMove().getKingMove());
-            //     } else {
-            //         this.context.getBoard().applyMove(move);
-            //     }
-            //     this.context.getDisplayer().removeMouseListener(this);
-            //     this.context.setState(new BlackTurnState(this.context));
-            // });
 
             this.context.getDisplayer().setSelectedSquare(null);
             this.context.getDisplayer().emptyAvailableMoves();
         }
+    }
+
+    private void finishMove() {
+        this.context.getDisplayer().removeMouseListener(this);
+        this.context.setState(new BlackTurnState(this.context));
     }
 }

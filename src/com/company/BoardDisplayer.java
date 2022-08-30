@@ -34,6 +34,15 @@ public class BoardDisplayer extends JComponent {
             g.setColor(squareColor);
             g.fillRect(s.getX() * sideLength, s.getY() * sideLength, sideLength, sideLength);
 
+            // Drawing the pieces
+            if (s.getPiece() != null) { // && s.getPiece().getType() == PieceType.QUEEN) {
+                g.drawImage(s.getPiece().getIcon().getScaledInstance(sideLength,
+                        sideLength, Image.SCALE_SMOOTH),
+                        s.getX() * sideLength,
+                        s.getY() * sideLength,
+                        null);
+            }
+
             // Drawing possible moves
             for (Move m : this.availableMoves) {
                 Square end;
@@ -57,14 +66,7 @@ public class BoardDisplayer extends JComponent {
                 }
             }
 
-            // Drawing the pieces
-            if (s.getPiece() != null) { // && s.getPiece().getType() == PieceType.QUEEN) {
-                g.drawImage(s.getPiece().getIcon().getScaledInstance(sideLength,
-                        sideLength, Image.SCALE_SMOOTH),
-                        s.getX() * sideLength,
-                        s.getY() * sideLength,
-                        null);
-            }
+
         }
         repaint();
     }

@@ -30,4 +30,9 @@ public class KnightStrategy implements PieceStrategy {
 
         return moves;
     }
+
+    @Override
+    public boolean canCapture() {
+        return true;
+    }
 }

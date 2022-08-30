@@ -1,24 +1,20 @@
 package com.company;
 
+import javax.swing.JFrame;
+
 import com.company.gamestate.GameStateContext;
 import com.company.models.Board;
 
-import javax.swing.*;
-
 public class GameManager {
     private Board board;
-    private BoardDisplayer displayer;
     private MoveGenerator generator;
-    private GameStateContext gameStateContext;
+    private BoardDisplayer displayer;
 
     public GameManager() {
         this.board = new Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
-//        this.board = new Board("8/8/8/3Q4/8/8/pppppppp/8");
-
-        int screenSideLength = 800;
-        this.displayer = new BoardDisplayer(this.board, screenSideLength);
         this.generator = new MoveGenerator();
-        this.gameStateContext = new GameStateContext(this.board, this.displayer, this.generator);
+        this.displayer = new BoardDisplayer(this.board, 800);
+        new GameStateContext(this.board, displayer, generator);
         this.createWindow(this.displayer);
     }
 

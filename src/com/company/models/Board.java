@@ -2,6 +2,7 @@ package com.company.models;
 
 public class Board {
     private final Square[] squares;
+    private Piece tempCaptured;
 
     public Board(String notation) {
         this.squares = this.initBoard();
@@ -28,6 +29,18 @@ public class Board {
         move.getPiece().setHasMoved(true);
         move.getEndSquare().setPiece(move.getPiece());
         move.getStartSquare().setPiece(null);
+        this.tempCaptured = null;
+    }
+  
+    public void tempMove(Move move) {
+        this.tempCaptured = move.getEndSquare().getPiece();
+        move.getEndSquare().setPiece(move.getPiece());
+        move.getStartSquare().setPiece(null);
+    }
+
+    public void cancelMove(Move move) {
+        move.getStartSquare().setPiece(move.getPiece());
+        move.getEndSquare().setPiece(this.tempCaptured);
     }
 
     public Square[] getSquares() {

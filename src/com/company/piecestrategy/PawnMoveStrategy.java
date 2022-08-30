@@ -7,7 +7,7 @@ import com.company.models.Square;
 
 import java.util.ArrayList;
 
-public class PawnMoveStrategy implements PieceStrategy{
+public class PawnMoveStrategy implements PieceStrategy {
     @Override
     public ArrayList<Move> generate(int pieceIndex, Board board) {
         ArrayList<Move> generatedMoves = new ArrayList<>();
@@ -33,5 +33,10 @@ public class PawnMoveStrategy implements PieceStrategy{
         }
 
         return generatedMoves;
+    }
+
+    @Override
+    public boolean canCapture() {
+        return false;
     }
 }

@@ -33,4 +33,9 @@ public class SlidingStrategy implements PieceStrategy {
 
         return generatedMoves;
     }
+
+    @Override
+    public boolean canCapture() {
+        return true;
+    }
 }

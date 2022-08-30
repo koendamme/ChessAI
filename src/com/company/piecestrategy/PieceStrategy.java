@@ -7,4 +7,5 @@ import java.util.ArrayList;
 
 public interface PieceStrategy {
     ArrayList<Move> generate(int pieceIndex, Board board);
+    boolean canCapture();
 }

@@ -42,6 +42,14 @@ public class Piece {
         return color;
     }
 
+    public PieceColor getOpponentColor() {
+        if (this.color == PieceColor.WHITE) {
+            return PieceColor.BLACK;
+        } else {
+            return PieceColor.WHITE;
+        }
+    }
+
     public void setColor(PieceColor color) {
         this.color = color;
     }

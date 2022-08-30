@@ -6,47 +6,88 @@ import com.company.piecestrategy.PieceStrategy;
 import java.util.ArrayList;
 
 public class MoveGenerator {
-    public ArrayList<Move> generateMovesForAllPieces(Board board, PieceColor color) {
-        ArrayList<Move> moves = new ArrayList<>();
+    // public ArrayList<Move> generateMovesForAllPieces(Board board, PieceColor color) {
+    //     ArrayList<Move> moves = new ArrayList<>();
 
-        for (int i = 0; i < board.getSquares().length; i++) {
-            Piece currPiece = board.getSquares()[i].getPiece();
+    //     for (int i = 0; i < board.getSquares().length; i++) {
+    //         Piece currPiece = board.getSquares()[i].getPiece();
 
-            if (currPiece != null && currPiece.getColor() == color) {
-                for (PieceStrategy strategy : currPiece.getStrategies()) {
-                    moves.addAll((strategy.generate(i, board)));
-                }
+    //         if (currPiece != null && currPiece.getColor() == color) {
+    //             for (PieceStrategy strategy : currPiece.getStrategies()) {
+    //                 moves.addAll((strategy.generate(i, board)));
+    //             }
 
-                // Castling
-                if (currPiece.getType() == PieceType.KING && !currPiece.hasMoved()) {
-                    CastleMove cm = this.generateCastleMove(board, i);
-                    if (cm.getKingMove() != null) {
-                        moves.add(new Move(cm));
-                    }
-                }
-            }
-        }
+    //             // Castling
+    //             if (currPiece.getType() == PieceType.KING && !currPiece.hasMoved()) {
+    //                 CastleMove cm = this.generateCastleMove(board, i);
+    //                 if (cm.getKingMove() != null) {
+    //                     moves.add(new Move(cm));
+    //                 }
+    //             }
+    //         }
+    //     }
 
-        return moves;
-    }
+    //     return moves;
+    // }
 
     public ArrayList<Move> generateMovesForPiece(Board board, int squareIndex) {
-        ArrayList<Move> moves = new ArrayList<>();
+        ArrayList<Move> legalMoves = new ArrayList<>();
         Piece piece = board.getSquares()[squareIndex].getPiece();
 
         for (PieceStrategy strategy : piece.getStrategies()) {
-            moves.addAll(strategy.generate(squareIndex, board));
+            ArrayList<Move> tempMoves = strategy.generate(squareIndex, board);
+
+            for (Move move : tempMoves) {
+                if (this.moveIsLegal(move, board)) {
+                    legalMoves.add(move);
+                }
+            }
         }
 
         // Castling
         if (piece.getType() == PieceType.KING && !piece.hasMoved()) {
             CastleMove cm = this.generateCastleMove(board, squareIndex);
-            if (cm.getKingMove() != null) {
-                moves.add(new Move(cm));
+            if (cm.getKingMove() != null && this.moveIsLegal(cm.getKingMove(), board) && this.moveIsLegal(cm.getRookMove(), board)) {
+                legalMoves.add(new Move(cm));
             }
         }
 
-        return moves;
+        return legalMoves;
+    }
+
+    private ArrayList<Square> findSquaresUnderAttack(Board board, PieceColor color) {
+        ArrayList<Square> squares = new ArrayList<>();
+
+        for (int i = 0; i < board.getSquares().length; i++) {
+            Square square = board.getSquares()[i];
+
+            if (square.getPiece() != null && square.getPiece().getColor() == color) {
+                for (PieceStrategy strategy : square.getPiece().getStrategies()) {
+                    if (strategy.canCapture()) {
+                        ArrayList<Move> moves = strategy.generate(i, board);
+                        for (Move move : moves) {
+                            squares.add(move.getEndSquare());
+                        }
+                    }
+                }
+            }
+        }
+
+        return squares;
+    }
+
+    private boolean moveIsLegal(Move move, Board board) {
+        board.tempMove(move);
+        ArrayList<Square> squaresUnderAttack = this.findSquaresUnderAttack(board, move.getPiece().getOpponentColor());
+        boolean check = false;
+        for (Square underAttack : squaresUnderAttack) {
+            if (underAttack.getPiece() != null && underAttack.getPiece().getType() == PieceType.KING) {
+                check = true;
+            }
+        }
+        board.cancelMove(move);
+
+        return !check;
     }
 
     private CastleMove generateCastleMove(Board board, int kingIndex) {
@@ -85,14 +126,4 @@ public class MoveGenerator {
 
         return castleMove;
     } 
-
-    private boolean squaresAreFree(Board board, int[] squares) {
-        boolean free = true;
-        
-        for (int i : squares) {
-            free = board.getSquares()[i] == null;
-        }
-
-        return free;
-    }
 }

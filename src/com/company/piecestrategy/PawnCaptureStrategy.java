@@ -27,4 +27,9 @@ public class PawnCaptureStrategy implements PieceStrategy {
 
         return generatedMoves;
     }
+
+    @Override
+    public boolean canCapture() {
+        return true;
+    }
 }

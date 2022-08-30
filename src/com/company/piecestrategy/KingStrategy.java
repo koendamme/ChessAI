@@ -26,4 +26,9 @@ public class KingStrategy implements PieceStrategy {
 
         return moves;
     }
+
+    @Override
+    public boolean canCapture() {
+        return true;
+    }
 }
