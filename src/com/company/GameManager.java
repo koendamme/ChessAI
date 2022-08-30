@@ -27,7 +27,7 @@ public class GameManager extends MouseAdapter {
         this.displayer = new BoardDisplayer(this.board, 800);
         this.player1 = player1;
         this.player2 = player2;
-        this.currentTurn = this.player2;
+        this.currentTurn = this.player1;
 
         this.displayer.addMouseListener(this);
         

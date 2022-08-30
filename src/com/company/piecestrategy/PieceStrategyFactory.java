@@ -17,6 +17,7 @@ public class PieceStrategyFactory {
             strategies.add(new KnightStrategy());
         } else if (pieceType == PieceType.KING) {
             strategies.add(new KingStrategy());
+            strategies.add(new KingCastlingStrategy());
         }
 
         return strategies;

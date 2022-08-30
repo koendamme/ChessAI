@@ -19,15 +19,7 @@ public class MoveGenerator {
                 }
             }
         }
-
-        // Castling
-        if (piece.getType() == PieceType.KING && !piece.hasMoved()) {
-            CastleMove cm = this.generateCastleMove(board, squareIndex);
-            if (cm.getKingMove() != null && this.moveIsLegal(cm.getKingMove(), board) && this.moveIsLegal(cm.getRookMove(), board)) {
-                legalMoves.add(new Move(cm));
-            }
-        }
-
+        
         return legalMoves;
     }
 
@@ -53,53 +45,30 @@ public class MoveGenerator {
     }
 
     private boolean moveIsLegal(Move move, Board board) {
-        board.tempMove(move);
-        ArrayList<Square> squaresUnderAttack = this.findSquaresUnderAttack(board, move.getPiece().getOpponentColor());
+        if (move.isCastleMove()) {
+            board.tempMove(move.getCastleMove().getKingMove());
+            board.tempMove(move.getCastleMove().getRookMove());
+        } else {
+            board.tempMove(move);
+        }
+
+        PieceColor color = move.isCastleMove() ? move.getCastleMove().getKingMove().getPiece().getOpponentColor() : move.getPiece().getOpponentColor();
+
+        ArrayList<Square> squaresUnderAttack = this.findSquaresUnderAttack(board, color);
         boolean check = false;
         for (Square underAttack : squaresUnderAttack) {
             if (underAttack.getPiece() != null && underAttack.getPiece().getType() == PieceType.KING) {
                 check = true;
             }
         }
-        board.cancelMove(move);
+
+        if (move.isCastleMove()) {
+            board.cancelMove(move.getCastleMove().getKingMove());
+            board.cancelMove(move.getCastleMove().getRookMove());
+        } else {
+            board.cancelMove(move);
+        }
 
         return !check;
     }
-
-    private CastleMove generateCastleMove(Board board, int kingIndex) {
-        CastleMove castleMove = new CastleMove();
-        
-        int[] squaresToEdge = board.getSquares()[kingIndex].getNumSquaresToEdge();
-        
-        Square eastEdgeSquare = board.getSquares()[kingIndex + squaresToEdge[1]];
-        Square westEdgeSquare = board.getSquares()[kingIndex - squaresToEdge[3]];
-        
-        // East castling
-        if (eastEdgeSquare.getPiece() != null && 
-            eastEdgeSquare.getPiece().getType() == PieceType.ROOK && 
-            !eastEdgeSquare.getPiece().hasMoved() && 
-            board.getSquares()[kingIndex + 1].getPiece() == null &&
-            board.getSquares()[kingIndex + 2].getPiece() == null) {
-                Move kingMove = new Move(board.getSquares()[kingIndex], board.getSquares()[kingIndex+2], board.getSquares()[kingIndex].getPiece());
-                Move rookMove = new Move(eastEdgeSquare, board.getSquares()[kingIndex+1], eastEdgeSquare.getPiece());
-                castleMove.setKingMove(kingMove);
-                castleMove.setRookMove(rookMove);
-        }
-
-        // West castling
-        if (westEdgeSquare.getPiece() != null && 
-            westEdgeSquare.getPiece().getType() == PieceType.ROOK && 
-            !westEdgeSquare.getPiece().hasMoved() &&
-            board.getSquares()[kingIndex -1].getPiece() == null &&
-            board.getSquares()[kingIndex -2].getPiece() == null &&
-            board.getSquares()[kingIndex -3].getPiece() == null) {
-                Move kingMove = new Move(board.getSquares()[kingIndex], board.getSquares()[kingIndex-2], board.getSquares()[kingIndex].getPiece());
-                Move rookMove = new Move(westEdgeSquare, board.getSquares()[kingIndex-1], westEdgeSquare.getPiece());
-                castleMove.setKingMove(kingMove);
-                castleMove.setRookMove(rookMove);
-        }
-
-
-        return castleMove;
-    } 
 }

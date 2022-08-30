@@ -4,6 +4,10 @@ public class CastleMove {
     private Move kingMove;
     private Move rookMove;
 
+    public CastleMove(Move kingMove, Move rookMove) {
+        this.kingMove = kingMove;
+        this.rookMove = rookMove;
+    }
 
     public Move getRookMove() {
         return rookMove;
