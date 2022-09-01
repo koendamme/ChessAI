@@ -2,6 +2,8 @@ package com.company;
 
 import com.company.models.Board;
 import com.company.models.Move;
+import com.company.models.Piece;
+import com.company.models.PieceColor;
 import com.company.models.Square;
 
 import javax.swing.*;
@@ -14,13 +16,16 @@ public class BoardDisplayer extends JComponent {
     private Square selectedSquare;
     private ArrayList<Move> availableMoves;
     private final int screenSideLength;
+    private PieceColor checkMate;
 
     public BoardDisplayer(Board board, int screenSideLength) {
+        this.checkMate = null;
         this.board = board;
         this.screenSideLength = screenSideLength;
         this.setPreferredSize(new Dimension(screenSideLength, screenSideLength));
         this.sideLength = screenSideLength/8;
         this.availableMoves = new ArrayList<>();
+        this.createWindow();
     }
 
     @Override
@@ -28,11 +33,30 @@ public class BoardDisplayer extends JComponent {
         super.paintComponent(g);
 
         for (Square s : this.board.getSquares()) {
-
             // Drawing the board
             Color squareColor = s.equals(this.selectedSquare) ? Color.YELLOW : this.getSquareColor(s.getX(), s.getY());
             g.setColor(squareColor);
             g.fillRect(s.getX() * sideLength, s.getY() * sideLength, sideLength, sideLength);
+
+            // Drawing possible moves
+            for (Move m : this.availableMoves) {
+                Square end = m.isCastleMove() ? m.getCastleMove().getKingMove().getEndSquare() : m.getEndSquare();
+                Piece movePiece = m.isCastleMove() ? m.getCastleMove().getKingMove().getPiece() : m.getPiece();
+
+                if (end.equals(s)) {
+                    g.setColor(Color.ORANGE);
+                    
+                    if (s.getPiece() != null && s.getPiece().getColor() != movePiece.getColor()) {
+                        g.fillRect(s.getX() * sideLength, s.getY() * sideLength, sideLength, sideLength);
+                    }
+                    else {
+                        g.fillOval(s.getX() * sideLength + sideLength / 3,
+                            s.getY() * sideLength + sideLength / 3,
+                            sideLength / 3,
+                            sideLength / 3);
+                    }
+                }
+            }
 
             // Drawing the pieces
             if (s.getPiece() != null) { // && s.getPiece().getType() == PieceType.QUEEN) {
@@ -42,32 +66,19 @@ public class BoardDisplayer extends JComponent {
                         s.getY() * sideLength,
                         null);
             }
+        }
 
-            // Drawing possible moves
-            for (Move m : this.availableMoves) {
-                Square end;
-                if (m.isCastleMove()) {
-                    end = m.getCastleMove().getKingMove().getEndSquare();
-                } else {
-                    end = m.getEndSquare();
-                }
+        // Checkmate?
+        if (this.checkMate != null) {
+            String wonString = "White";
 
-                if (end.equals(s)) {
-                    g.setColor(Color.ORANGE);
-                    if (s.getPiece() != null && s.getPiece().getColor() != end.getPiece().getColor()) {
-                        g.fillRect(s.getX() * sideLength, s.getY() * sideLength, sideLength, sideLength);
-                    }
-                    else {
-                        g.fillOval(s.getX() * sideLength + sideLength / 3,
-                                s.getY() * sideLength + sideLength / 3,
-                                sideLength / 3,
-                                sideLength / 3);
-                    }
-                }
+            if (this.checkMate == PieceColor.WHITE) {
+                wonString = "Black";
             }
 
-
+            g.drawString("Checkmate! " + wonString + "Won the game", sideLength / 2, sideLength / 2);
         }
+
         repaint();
     }
 
@@ -106,5 +117,24 @@ public class BoardDisplayer extends JComponent {
 
     public int getScreenSideLength() {
         return screenSideLength;
+    }
+
+    public void checkMate(PieceColor color) {
+
+    }
+
+    public void setCheckMate(PieceColor color) {
+        System.out.println("Checkmate!");
+        this.checkMate = color;
+        repaint();
+    }
+
+    private void createWindow() {
+        JFrame frame = new JFrame("Chess");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().add(this);
+        frame.setResizable(false);
+        frame.pack();
+        frame.setVisible(true);
     }
 }
